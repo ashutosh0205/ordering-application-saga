@@ -1,0 +1,11 @@
+server:
+  port: 8083
+---
+
+spring:
+  jpa:
+    defer-datasource-initialization: true
+service:
+  endpoints:
+    inventory: http://localhost:8081
+    payment: http://localhost:8082
