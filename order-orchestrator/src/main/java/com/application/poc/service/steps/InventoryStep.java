@@ -28,6 +28,7 @@ public class InventoryStep implements WorkflowStep {
 
     @Override
     public Mono<Boolean> process() {
+        log.info("performing inventory step for order: {}", this.requestDTO.getOrderId());
         return this.webClient
                 .post()
                 .uri("/inventory/deduct")
@@ -43,6 +44,7 @@ public class InventoryStep implements WorkflowStep {
 
     @Override
     public Mono<Boolean> revert() {
+        log.info("Reverting inventory step for order: {}", this.requestDTO.getOrderId());
         return this.webClient
                     .post()
                     .uri("/inventory/add")

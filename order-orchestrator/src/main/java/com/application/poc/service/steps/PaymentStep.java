@@ -28,6 +28,7 @@ public class PaymentStep implements WorkflowStep {
 
     @Override
     public Mono<Boolean> process() {
+        log.info("performing payment step for order: {}", this.requestDTO.getOrderId());
         return this.webClient
                     .post()
                     .uri("/payment/debit")
@@ -37,12 +38,13 @@ public class PaymentStep implements WorkflowStep {
                     .map(r -> r.getStatus().equals(PaymentStatus.PAYMENT_APPROVED))
                     .doOnNext(b -> {
                         WorkflowStepStatus status = this.stepStatus = b ? WorkflowStepStatus.COMPLETE : WorkflowStepStatus.FAILED;
-                        log.info("Inventory Step Status: {}", status);
+                        log.info("Payment Step Status: {}", status);
                     });
     }
 
     @Override
     public Mono<Boolean> revert() {
+        log.info("Reverting payment step for order: {}", this.requestDTO.getOrderId());
         return this.webClient
                 .post()
                 .uri("/payment/credit")
